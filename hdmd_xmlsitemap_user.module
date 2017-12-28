@@ -14,18 +14,21 @@ function hdmd_xmlsitemap_user_views_api() {
  * Implements hook_form_alter().
  */
 function hdmd_xmlsitemap_user_form_alter(&$form, &$form_state, $form_id) {
-
   switch ($form_id) {
     case 'views_form_hdmd_xmlsitemap_user_page':
       if (isset($form['script'])) {
         // Attach css.
         $form['#attached']['css'] = array(drupal_get_path('module', 'hdmd_xmlsitemap_user') . '/theme/hdmd_xmlsitemap_user.css');
+        // Attach js.
         $form['#attached']['js'] = array(drupal_get_path('module', 'hdmd_xmlsitemap_user') . '/theme/hdmd_xmlsitemap_user.js');
 
+        // Create a markup for "Create sitemap link" button.
         $form['create_sitemap_script'] = array(
           '#markup' => t('<a href="#" data-status="1" class="btn btn-success btn-generate-sitemap">Create sitemap link</a>'),
           '#weight' => -2
         );
+
+        // Create a markup for "Remove sitemap link" button.
         $form['remove_sitemap_script'] = array(
           '#markup' => t('<a href="#" data-status="0" class="btn btn-danger btn-generate-sitemap">Remove sitemap link</a>'),
           '#weight' => -1
@@ -35,6 +38,14 @@ function hdmd_xmlsitemap_user_form_alter(&$form, &$form_state, $form_id) {
   }
 }
 
+/**
+ * @param
+ *    $entity: Pass the user entity object.
+ *    $status: Pass the status.
+ *
+ * @todo
+ *    Generate a sitemap xml link based on the $entity
+ */
 function _user_regenerate_sitemap_link($entity, $status) {
   $base_url = $GLOBALS['base_url'];
 
