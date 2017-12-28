@@ -5,3 +5,5 @@ core = 7.x
 dependencies[] = views
 dependencies[] = views_bulk_operations
 dependencies[] = xmlsitemap
+
+configure = admin/config/search/xmlsitemap/user
