@@ -19,20 +19,8 @@ function hdmd_xmlsitemap_user_form_alter(&$form, &$form_state, $form_id) {
       if (isset($form['script'])) {
         // Attach css.
         $form['#attached']['css'] = array(drupal_get_path('module', 'hdmd_xmlsitemap_user') . '/theme/hdmd_xmlsitemap_user.css');
-        // Attach js.
-        $form['#attached']['js'] = array(drupal_get_path('module', 'hdmd_xmlsitemap_user') . '/theme/hdmd_xmlsitemap_user.js');
-
-        // Create a markup for "Create sitemap link" button.
-        $form['create_sitemap_script'] = array(
-          '#markup' => t('<a href="#" data-status="1" class="btn btn-success btn-generate-sitemap">Create sitemap link</a>'),
-          '#weight' => -2
-        );
-
-        // Create a markup for "Remove sitemap link" button.
-        $form['remove_sitemap_script'] = array(
-          '#markup' => t('<a href="#" data-status="0" class="btn btn-danger btn-generate-sitemap">Remove sitemap link</a>'),
-          '#weight' => -1
-        );
+        // Set a default value.
+        $form['script']['#default_value'] = '_user_regenerate_sitemap_link($entity);';
       }
       break;
   }
@@ -40,26 +28,28 @@ function hdmd_xmlsitemap_user_form_alter(&$form, &$form_state, $form_id) {
 
 /**
  * @param
- *    $entity: Pass the user entity object.
- *    $status: Pass the status.
+ *    $account: Pass the user object.
  *
  * @todo
  *    Generate a sitemap xml link based on the $entity
  */
-function _user_regenerate_sitemap_link($entity, $status) {
-  $base_url = $GLOBALS['base_url'];
+function _user_regenerate_sitemap_link($account) {
+  // Load account object.
+  $account = user_load($account->uid);
 
-  $sorted[$entity->uid] = array(
-    'type' => 'user',
-    'subtype' => 'hdmd_xmlsitemap_user',
-    'id' => $entity->uid,
-    'loc' => $base_url . url('user/' . $entity->uid),
-    'status' => $status,
-    'access' => $status,
-    'lastmod' => time(),
-    'changefreq' => 0,
-    'priority' => 0.5,
+  $sorted[$account->uid] = array(
+    'type'        => 'user',
+    'subtype'     => 'hdmd_xmlsitemap_user',
+    'id'          => $account->uid,
+    'loc'         => 'user/' . $account->uid,
+    // Status will be based on account status.
+    'status'      => $account->status,
+    // Access will be based on account status.
+    'access'      => $account->status,
+    'lastmod'     => time(),
+    'changefreq'  => 0,
+    'priority'    => 0.5,
   );
 
-  xmlsitemap_link_save($sorted[$entity->uid]);
+  xmlsitemap_link_save($sorted[$account->uid]);
 }
