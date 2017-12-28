@@ -19,6 +19,7 @@ function hdmd_xmlsitemap_user_form_alter(&$form, &$form_state, $form_id) {
       if (isset($form['script'])) {
         // Attach css.
         $form['#attached']['css'] = array(drupal_get_path('module', 'hdmd_xmlsitemap_user') . '/theme/hdmd_xmlsitemap_user.css');
+
         // Set a default value.
         $form['script']['#default_value'] = '_user_regenerate_sitemap_link($entity);';
       }
@@ -29,11 +30,12 @@ function hdmd_xmlsitemap_user_form_alter(&$form, &$form_state, $form_id) {
 /**
  * @param
  *    $account: Pass the user object.
+ *    $status: Use $status if not empty. Otherwise, use the $account->status
  *
  * @todo
  *    Generate a sitemap xml link based on the $entity
  */
-function _user_regenerate_sitemap_link($account) {
+function _user_regenerate_sitemap_link($account, $status = NULL) {
   // Load account object.
   $account = user_load($account->uid);
 
@@ -43,7 +45,7 @@ function _user_regenerate_sitemap_link($account) {
     'id'          => $account->uid,
     'loc'         => 'user/' . $account->uid,
     // Status will be based on account status.
-    'status'      => $account->status,
+    'status'      => empty($status) ? $account->status : $status,
     // Access will be based on account status.
     'access'      => $account->status,
     'lastmod'     => time(),
