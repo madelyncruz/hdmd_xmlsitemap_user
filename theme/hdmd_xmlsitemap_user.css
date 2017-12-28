@@ -1,0 +1,24 @@
+.btn {
+  cursor: pointer;
+  border-radius: 0;
+  border: none;
+  padding: 6px 10px;
+  margin-bottom: 1em;
+  margin-right: 1em;
+  color: #fff;
+  text-align: center;
+  font-weight: normal;
+  font-size: 1.077em;
+  transition: all, 0.3s;
+  margin-bottom: 10px;
+  display: inline-block;
+}
+.btn.btn-success {
+  background: #4d8f46;
+  text-decoration: none;
+}
+.btn.btn-danger {
+  background: #b73939;
+  text-decoration: none;
+}
+

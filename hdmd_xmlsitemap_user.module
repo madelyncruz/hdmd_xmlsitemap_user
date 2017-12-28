@@ -1,0 +1,54 @@
+<?php
+
+/**
+* Implementation of hook_views_api().
+*/
+function hdmd_xmlsitemap_user_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'hdmd_xmlsitemap_user') . '/views',
+  );
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function hdmd_xmlsitemap_user_form_alter(&$form, &$form_state, $form_id) {
+
+  switch ($form_id) {
+    case 'views_form_hdmd_xmlsitemap_user_page':
+      if (isset($form['script'])) {
+        // Attach css.
+        $form['#attached']['css'] = array(drupal_get_path('module', 'hdmd_xmlsitemap_user') . '/theme/hdmd_xmlsitemap_user.css');
+        $form['#attached']['js'] = array(drupal_get_path('module', 'hdmd_xmlsitemap_user') . '/theme/hdmd_xmlsitemap_user.js');
+
+        $form['create_sitemap_script'] = array(
+          '#markup' => t('<a href="#" data-status="1" class="btn btn-success btn-generate-sitemap">Create sitemap link</a>'),
+          '#weight' => -2
+        );
+        $form['remove_sitemap_script'] = array(
+          '#markup' => t('<a href="#" data-status="0" class="btn btn-danger btn-generate-sitemap">Remove sitemap link</a>'),
+          '#weight' => -1
+        );
+      }
+      break;
+  }
+}
+
+function _user_regenerate_sitemap_link($entity, $status) {
+  $base_url = $GLOBALS['base_url'];
+
+  $sorted[$entity->uid] = array(
+    'type' => 'user',
+    'subtype' => 'hdmd_xmlsitemap_user',
+    'id' => $entity->uid,
+    'loc' => $base_url . url('user/' . $entity->uid),
+    'status' => $status,
+    'access' => $status,
+    'lastmod' => time(),
+    'changefreq' => 0,
+    'priority' => 0.5,
+  );
+
+  xmlsitemap_link_save($sorted[$entity->uid]);
+}
