@@ -3,22 +3,22 @@
 /**
 * Implementation of hook_views_api().
 */
-function hdmd_xmlsitemap_user_views_api() {
+function xmlsitemap_user_views_api() {
   return array(
     'api' => 3,
-    'path' => drupal_get_path('module', 'hdmd_xmlsitemap_user') . '/views',
+    'path' => drupal_get_path('module', 'xmlsitemap_user') . '/views',
   );
 }
 
 /**
  * Implements hook_form_alter().
  */
-function hdmd_xmlsitemap_user_form_alter(&$form, &$form_state, $form_id) {
+function xmlsitemap_user_form_alter(&$form, &$form_state, $form_id) {
   switch ($form_id) {
-    case 'views_form_hdmd_xmlsitemap_user_page':
+    case 'views_form_xmlsitemap_user_page':
       if (isset($form['script'])) {
         // Attach css.
-        $form['#attached']['css'] = array(drupal_get_path('module', 'hdmd_xmlsitemap_user') . '/theme/hdmd_xmlsitemap_user.css');
+        $form['#attached']['css'] = array(drupal_get_path('module', 'xmlsitemap_user') . '/theme/xmlsitemap_user.css');
 
         // Set a default value.
         $form['script']['#default_value'] = '_user_regenerate_sitemap_link($entity);';
@@ -41,7 +41,7 @@ function _user_regenerate_sitemap_link($account, $status = NULL) {
 
   $sorted[$account->uid] = array(
     'type'        => 'user',
-    'subtype'     => 'hdmd_xmlsitemap_user',
+    'subtype'     => 'xmlsitemap_user',
     'id'          => $account->uid,
     'loc'         => 'user/' . $account->uid,
     // Status will be based on account status.

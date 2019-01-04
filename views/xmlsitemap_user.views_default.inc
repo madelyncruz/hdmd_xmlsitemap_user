@@ -4,15 +4,15 @@
 /**
  * Implements hook_views_default_views().
  */
-function hdmd_xmlsitemap_user_views_default_views() {
+function xmlsitemap_user_views_default_views() {
   $views = array();
 
   $view = new view();
-  $view->name = 'hdmd_xmlsitemap_user';
+  $view->name = 'xmlsitemap_user';
   $view->description = '';
   $view->tag = 'default';
   $view->base_table = 'users';
-  $view->human_name = 'HDMD Sitemap User';
+  $view->human_name = 'Sitemap User';
   $view->core = 7;
   $view->api_version = '3.0';
   $view->disabled = FALSE; /* Edit this to true to make a default view disabled initially */

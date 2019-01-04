@@ -1,1 +1,1 @@
-# HDMD Sitemap XML User
+# Sitemap XML User

@@ -1,4 +1,4 @@
-name = HDMD Sitemap XML User
+name = Sitemap XML User
 description = Provides a view to execute an arbitrary PHP script.
 core = 7.x
 
